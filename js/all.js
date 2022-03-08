@@ -5,26 +5,9 @@ let data = [];
 let showData = [];
 let category = '';
 
-axios.get(url).then(function (res) {
-  data = res.data.filter((a) => a.作物名稱);
-  renderData(data);
-});
-
-function filterCategory(e) {
-  if (e.target.nodeName == 'BUTTON') {
-    category = e.target.dataset.category;
-    showData = data.filter((i) => {
-      return i.種類代碼 == category;
-    });
-    renderData(showData);
-  } else {
-    return;
-  }
-}
-
-function renderData(data) {
+function renderData(item) {
   let str = '';
-  data.forEach((i, index) => {
+  item.forEach((i) => {
     const content = `<tr>
       <td>${i.作物名稱}</td>
       <td>${i.市場名稱}</td>
@@ -38,6 +21,19 @@ function renderData(data) {
     str += content;
   });
   table.innerHTML = str;
+}
+
+this.axios.get(url).then((res) => {
+  data = res.data.filter((a) => a.作物名稱);
+  renderData(data);
+});
+
+function filterCategory(e) {
+  if (e.target.nodeName === 'BUTTON') {
+    category = e.target.dataset.category;
+    showData = data.filter((i) => i.種類代碼 === category);
+    renderData(showData);
+  }
 }
 
 filter.addEventListener('click', filterCategory);
